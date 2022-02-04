@@ -9,8 +9,7 @@ const msg = `I will show you photo with id: ${id}`
 </script>
 
 <template>
-  <main>
+  <div class="w-full flex flex-col items-center">
     <HelloWorld :msg="msg" />
-    <q-btn color="white" text-color="black" label="Standard" />
-  </main>
+  </div>
 </template>
