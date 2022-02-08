@@ -1,20 +1,24 @@
 <script setup>
+/* eslint-disable no-unused-vars */
 import { setPhoto } from '@/apis/photo'
 import HelloWorld from '@/components/HelloWorld.vue'
 import { PATH } from '@/constants/route'
 import { ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 
+import { useQuasar } from 'quasar'
+
 const route = useRouter()
 
+const quasar = useQuasar()
 const imgInput = ref(null)
 const previewImage = ref('')
 
-const selectImg = () => {
+const uploadImg = () => {
   imgInput.value.click()
 }
 
-const readImg = (e) => {
+const readImg = async (e) => {
   const files = e.target.files
   if (files && files[0]) {
     let reader = new FileReader()
@@ -23,37 +27,35 @@ const readImg = (e) => {
     }
     reader.readAsDataURL(files[0])
   }
-}
 
-const uploadImg = async () => {
+  quasar.loading.show()
   const { photoId } = (await setPhoto()).data
+  quasar.loading.hide()
   route.push(PATH.PHOTO.replace(':id', photoId))
 }
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center">
+  <div class="w-full flex flex-col items-center space-y-8">
     <HelloWorld msg="You did it!" />
-    <img v-if="previewImage" :src="previewImage" class="w-64" />
-    <q-card v-else class="my-card h-64 w-64 bg-grey-4"> </q-card>
-    <input
-      ref="imgInput"
-      @change="readImg"
-      type="file"
-      accept="image/*"
-      hidden
-    />
-    <q-btn
-      color="primary"
-      class="q-mt-md w-64"
-      label="select image"
-      @click="selectImg"
-    />
-    <q-btn
-      color="primary"
-      class="q-mt-md w-64"
-      label="upload image"
+    <q-card v-if="previewImage" class="max-h-96 max-w-1/2">
+      <img :src="previewImage" class="max-h-96 max-w-1/2" />
+    </q-card>
+    <q-card
+      v-else
+      class="h-96 w-1/2 bg-grey-1 flex flex-col items-center justify-center space-y-2"
       @click="uploadImg"
-    />
+    >
+      <q-icon name="bi-file-image" color="grey-8" size="5rem" />
+      <div class="text-h6">Add photos here</div>
+      <div class="text-subtitle1">or drag and drop</div>
+      <input
+        ref="imgInput"
+        @change="readImg"
+        type="file"
+        accept="image/*"
+        hidden
+      />
+    </q-card>
   </div>
 </template>
