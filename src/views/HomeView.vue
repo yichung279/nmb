@@ -1,12 +1,13 @@
 <script setup>
-/* eslint-disable no-unused-vars */
-import { setPhoto } from '@/apis/photo'
-import HelloWorld from '@/components/HelloWorld.vue'
-import { PATH } from '@/constants/route'
-import { ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
+
+import { ref } from '@vue/reactivity'
+
+import { setPhoto } from '@/apis/photo'
+import HelloWorld from '@/components/HelloWorld.vue'
+import { PATH } from '@/constants/route'
 
 const route = useRouter()
 

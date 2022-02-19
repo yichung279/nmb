@@ -1,6 +1,7 @@
 <script setup>
-import HelloWorld from '@/components/HelloWorld.vue'
 import { useRoute } from 'vue-router'
+
+import HelloWorld from '@/components/HelloWorld.vue'
 
 const route = useRoute()
 const { id } = route.params

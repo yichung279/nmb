@@ -1,5 +1,6 @@
-import { PATH } from '@/constants/route'
 import { createRouter, createWebHistory } from 'vue-router'
+
+import { PATH } from '@/constants/route'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
