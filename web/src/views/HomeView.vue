@@ -6,7 +6,6 @@ import { useQuasar } from 'quasar'
 import { ref } from '@vue/reactivity'
 
 import { setPhoto } from '@/apis/photo'
-import HelloWorld from '@/components/HelloWorld.vue'
 import { PATH } from '@/constants/route'
 
 const route = useRouter()
@@ -37,14 +36,16 @@ const readImg = async (e) => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center space-y-8">
-    <HelloWorld msg="You did it!" />
-    <q-card v-if="previewImage" class="max-h-96 max-w-1/2">
+  <div
+    class="w-full min-h-screen flex flex-col items-center space-y-8 bg-grey-2 pt-16"
+  >
+    <div class="text-h1">Masuni</div>
+    <q-card v-if="previewImage" class="max-h-96 max-w-1/2 rounded-xl">
       <img :src="previewImage" class="max-h-96 max-w-1/2" />
     </q-card>
     <q-card
       v-else
-      class="h-96 w-1/2 bg-grey-1 flex flex-col items-center justify-center space-y-2"
+      class="h-96 w-1/2 bg-white flex flex-col items-center justify-center space-y-2 rounded-xl"
       @click="uploadImg"
     >
       <q-icon name="bi-file-image" color="grey-8" size="5rem" />
