@@ -1,6 +1,6 @@
 ### Title Format (delete after read)
 
-[ ] Type(ComponentName?)：commit message
+* [ ] Type(ComponentName?)：commit message
 
 Allowed Types:
 
@@ -17,7 +17,7 @@ Allowed Types:
 
 ### Test
 
-[ ] yarn dev
-[ ] yarn build
-[ ] yarn typecheck
-[ ] yarn lint
+* [ ] yarn dev
+* [ ] yarn build
+* [ ] yarn typecheck
+* [ ] yarn lint
