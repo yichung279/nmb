@@ -13,6 +13,7 @@ const route = useRouter()
 
 const quasar = useQuasar()
 const imgInput = ref(null)
+// eslint-disable-next-line vue/no-export-in-script-setup
 const previewImage = ref('')
 
 const uploadImg = () => {
