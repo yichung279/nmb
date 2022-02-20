@@ -41,7 +41,7 @@ const readImg = async (e: Event): Promise<void> => {
   >
     <div class="text-h1">Masuni</div>
     <q-card v-if="previewImage" class="max-h-96 max-w-1/2 rounded-xl">
-      <img :src="previewImage" class="max-h-96 max-w-1/2" />
+      <img :src="previewImage.value" class="max-h-96 max-w-1/2" />
     </q-card>
     <q-card
       v-else
