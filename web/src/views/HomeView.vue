@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
@@ -11,19 +11,19 @@ import { PATH } from '@/constants/route'
 const route = useRouter()
 
 const quasar = useQuasar()
-const imgInput = ref(null)
-const previewImage = ref('')
+const imgInput = ref<HTMLInputElement | null>(null)
+const previewImage = ref<string | undefined>()
 
 const uploadImg = () => {
-  imgInput.value.click()
+  imgInput.value?.click()
 }
 
-const readImg = async (e) => {
-  const files = e.target.files
+const readImg = async (e: Event): Promise<void> => {
+  const files = (e.target as HTMLInputElement).files
   if (files && files[0]) {
     let reader = new FileReader()
-    reader.onload = (e) => {
-      previewImage.value = e.target.result
+    reader.onload = (e: Event) => {
+      previewImage.value = (e.target as FileReader).result as string
     }
     reader.readAsDataURL(files[0])
   }
@@ -41,7 +41,7 @@ const readImg = async (e) => {
   >
     <div class="text-h1">Masuni</div>
     <q-card v-if="previewImage" class="max-h-96 max-w-1/2 rounded-xl">
-      <img :src="previewImage" class="max-h-96 max-w-1/2" />
+      <img :src="previewImage.value" class="max-h-96 max-w-1/2" />
     </q-card>
     <q-card
       v-else
