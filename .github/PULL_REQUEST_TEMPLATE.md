@@ -1,13 +1,6 @@
-### Title Format
+### Title Format (delete after read)
 
-Type(ComponentName?)：commit message
-
-Example：
-
-- Docs: fix typo in quickstart
-- Test: optimize test speed
-- Fix(Button): incorrect style
-- Feat(Button): add color prop
+[ ] Type(ComponentName?)：commit message
 
 Allowed Types:
 
@@ -18,18 +11,13 @@ Allowed Types:
 - Chore
 - Refactor
 
-### Template
-```
 ### Problem
-
-Example:
-
-After upload, user needs to see the pic
 
 ### Solution
 
-Example:
+### Test
 
-Adopt a card at the buttom to shows it.
-As the uploaded imaged is stored in previewImage,we should leavage from it.
-```
+[ ] yarn dev
+[ ] yarn build
+[ ] yarn typecheck
+[ ] yarn lint
