@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
-
-import { ref } from '@vue/reactivity'
 
 import { setPhoto } from '@/apis/photo'
 import { PATH } from '@/constants/route'
@@ -31,7 +30,8 @@ const readImg = async (e: Event): Promise<void> => {
   quasar.loading.show()
   const { photoId } = (await setPhoto()).data
   quasar.loading.hide()
-  route.push(PATH.PHOTO.replace(':id', photoId))
+  await route.push(PATH.PHOTO.replace(':id', photoId))
+  window.history.state.data = previewImage.value
 }
 </script>
 
@@ -41,7 +41,7 @@ const readImg = async (e: Event): Promise<void> => {
   >
     <div class="text-h1">Masuni</div>
     <q-card v-if="previewImage" class="max-h-96 max-w-1/2 rounded-xl">
-      <img :src="previewImage.value" class="max-h-96 max-w-1/2" />
+      <img :src="previewImage" class="max-h-96 max-w-1/2" />
     </q-card>
     <q-card
       v-else
