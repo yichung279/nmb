@@ -7,8 +7,14 @@ build/presign_url_handler:
 	mkdir -p build/backend/presign_url/
 	$(GO) build -o ./build/backend/presign_url/handler github.com/yichung279/masuni/backend/presign_url/handler
 
-# TODO: test
-# test/presign_url_handler:
+test/presign_url_handler:
+	go test ./backend./presign_url/...
 
-# TODO: lint
-# lint/presign_url_handler:
+lint/presign_url_handler:
+	cd backend && golangci-lint ./presign_url/...
+
+test/backend:
+	go test ./backend/...
+
+lint/backend:
+	cd backend && golangci-lint ./...
