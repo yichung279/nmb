@@ -32,7 +32,6 @@ func New(config Config) (*Impl, error) {
 		s3PresignClient: s3PresignClient,
 		bucket:          config.Bucket,
 	}, nil
-
 }
 
 func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
