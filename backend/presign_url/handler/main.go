@@ -1,11 +1,11 @@
-package handler
+package main
 
 import (
 	"context"
-	"log"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/config"
+	log "github.com/sirupsen/logrus"
 
 	presignUrlHandler "github.com/yichung279/masuni/backend/presign_url"
 )
@@ -14,9 +14,10 @@ func main() {
 	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
-		// TODO: use the proper log message
-		log.Fatal()
+		log.Fatalf("failed to load default config: %v", err)
 	}
+
+	log.Infof("cfg: %+v", cfg)
 
 	handler, err := presignUrlHandler.New(
 		presignUrlHandler.Config{
@@ -25,8 +26,7 @@ func main() {
 		},
 	)
 	if err != nil {
-		// TODO: use the proper log message
-		log.Fatal()
+		log.Fatalf("failed to create presign url handler: %v", err)
 	}
 
 	lambda.StartHandlerWithContext(ctx, handler)

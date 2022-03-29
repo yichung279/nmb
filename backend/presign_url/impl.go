@@ -3,11 +3,13 @@ package presigned_url
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	log "github.com/sirupsen/logrus"
 )
 
 var _ lambda.Handler = &Impl{}
@@ -35,7 +37,14 @@ func New(config Config) (*Impl, error) {
 }
 
 func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
+	var req events.APIGatewayProxyRequest
 	var res events.APIGatewayProxyResponse
+
+	err := json.Unmarshal(payload, &req)
+	if err != nil {
+		return nil, fmt.Errorf("payload unmarshal failed: %v", err)
+	}
+	log.Infof("req payload: %v", req)
 
 	presignUrl, err := i.getPresignUrl(ctx)
 	if err != nil {
@@ -60,6 +69,5 @@ func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 }
 
 func (i *Impl) getPresignUrl(ctx context.Context) (string, error) {
-	// TODO: get presign url
-	return "", nil
+	return "presign url test", nil
 }
