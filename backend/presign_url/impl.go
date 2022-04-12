@@ -22,7 +22,7 @@ type Config struct {
 type Impl struct {
 	s3Client        *s3.Client
 	s3PresignClient *s3.PresignClient
-	bucket          string
+	Config
 }
 
 func New(config Config) (*Impl, error) {
@@ -32,7 +32,7 @@ func New(config Config) (*Impl, error) {
 	return &Impl{
 		s3Client:        s3Client,
 		s3PresignClient: s3PresignClient,
-		bucket:          config.Bucket,
+		Config:          config,
 	}, nil
 }
 
@@ -75,7 +75,7 @@ func newUUID() string {
 func (i *Impl) getPresignUrl(ctx context.Context) (string, error) {
 	key := newUUID()
 	objectInput := &s3.GetObjectInput{
-		Bucket: &i.bucket,
+		Bucket: &i.Bucket,
 		Key:    &key,
 	}
 	resp, err := i.s3PresignClient.PresignGetObject(ctx, objectInput)
