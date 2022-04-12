@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	log "github.com/sirupsen/logrus"
+	"github.com/google/uuid"
 )
 
 var _ lambda.Handler = &Impl{}
@@ -44,11 +44,10 @@ func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("payload unmarshal failed: %v", err)
 	}
-	log.Infof("req payload: %v", req)
 
 	presignUrl, err := i.getPresignUrl(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get presign url: %v", err)
 	}
 
 	b, err := json.Marshal(&struct {
@@ -57,17 +56,31 @@ func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 		Url: presignUrl,
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to marshal: %v", err)
 	}
 
 	res.Body = string(b)
 	resByte, err := json.Marshal(&res)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to marshal: %v", err)
 	}
 	return resByte, nil
 }
 
+func newUUID() string {
+	id := uuid.New()
+	return id.String()
+}
+
 func (i *Impl) getPresignUrl(ctx context.Context) (string, error) {
-	return "presign url test", nil
+	key := newUUID()
+	objectInput := &s3.GetObjectInput{
+		Bucket: &i.bucket,
+		Key:    &key,
+	}
+	resp, err := i.s3PresignClient.PresignGetObject(ctx, objectInput)
+	if err != nil {
+		return "", fmt.Errorf("faild to get presign object: %v", err)
+	}
+	return resp.URL, nil
 }
