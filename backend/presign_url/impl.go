@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -38,7 +39,6 @@ func New(config Config) (*Impl, error) {
 
 func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 	var req events.APIGatewayProxyRequest
-	var res events.APIGatewayProxyResponse
 
 	err := json.Unmarshal(payload, &req)
 	if err != nil {
@@ -50,17 +50,22 @@ func (i *Impl) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 		return nil, fmt.Errorf("failed to get presign url: %v", err)
 	}
 
-	b, err := json.Marshal(&struct {
-		Url string `json:"url"`
-	}{
-		Url: presignUrl,
-	})
+	body := presignUrl
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal: %v", err)
 	}
 
-	res.Body = string(b)
-	resByte, err := json.Marshal(&res)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal: %v", err)
+	}
+
+	res := events.APIGatewayProxyResponse{
+		StatusCode: http.StatusOK,
+		Headers:    map[string]string{"Content-Type": "text/json", "Content-Encoding": "UTF-8"},
+		Body:       string(body),
+	}
+
+	resByte, err := json.Marshal(res)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal: %v", err)
 	}
@@ -74,11 +79,10 @@ func newUUID() string {
 
 func (i *Impl) getPresignUrl(ctx context.Context) (string, error) {
 	key := newUUID()
-	objectInput := &s3.GetObjectInput{
+	resp, err := i.s3PresignClient.PresignPutObject(ctx, &s3.PutObjectInput{
 		Bucket: &i.Bucket,
 		Key:    &key,
-	}
-	resp, err := i.s3PresignClient.PresignGetObject(ctx, objectInput)
+	})
 	if err != nil {
 		return "", fmt.Errorf("faild to get presign object: %v", err)
 	}

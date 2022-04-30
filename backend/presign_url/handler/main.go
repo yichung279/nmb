@@ -17,12 +17,10 @@ func main() {
 		log.Fatalf("failed to load default config: %v", err)
 	}
 
-	log.Infof("cfg: %+v", cfg)
-
 	handler, err := presignUrlHandler.New(
 		presignUrlHandler.Config{
 			AwsConfig: cfg,
-			Bucket:    "beauty",
+			Bucket:    "masuni-beauty",
 		},
 	)
 	if err != nil {
